@@ -11,7 +11,7 @@ def writeToInflux(String influxTarget, String prefix, Map customDataMap) {
     Map globalTags = ["currentBuildTag": "Success"]
     step([$class: 'InfluxDbPublisher',
           customData: [:],
-          globaTags: globalTags,
+          globalTags: globalTags,
           customDataMap: customDataMap,
           customPrefix: prefix,
           target: influxTarget])
