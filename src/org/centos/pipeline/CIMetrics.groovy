@@ -9,6 +9,7 @@ package org.centos.pipeline
 def writeToInflux(String influxTarget, String prefix, Map customDataMap) {
     step([$class: 'InfluxDbPublisher',
           customData: [:],
+          globaTags: ['currentBuildTag': 'success']
           customDataMap: customDataMap,
           customPrefix: prefix,
           target: influxTarget])
