@@ -7,9 +7,11 @@ package org.centos.pipeline
  * @param customDataMap - the data to be written to influx
  */
 def writeToInflux(String influxTarget, String prefix, Map customDataMap) {
+
+    Map globalTags = ["currentBuildTag": "Success"]
     step([$class: 'InfluxDbPublisher',
           customData: [:],
-          globaTags: ['currentBuildTag': 'success'],
+          globaTags: globalTags,
           customDataMap: customDataMap,
           customPrefix: prefix,
           target: influxTarget])
