@@ -16,7 +16,7 @@ RUN /usr/bin/fix-permissions /var/log/grafana && \
     /usr/bin/fix-permissions /usr/share/grafana && \
     /usr/bin/fix-permissions /usr/sbin/grafana-server
 
-VOLUME ["/var/lib/grafana", "/var/log/grafana", "/etc/grafana"]
+VOLUME ["/var/lib/grafana", "/var/log/grafana", "/usr/share/grafana"]
 
 EXPOSE 3000
 
