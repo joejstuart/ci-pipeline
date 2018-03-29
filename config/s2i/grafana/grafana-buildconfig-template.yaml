@@ -25,7 +25,7 @@ parameters:
   value: config/Dockerfiles/grafana
 - name: REPO_REF
   description: The git ref or tag to use for customization.
-  value: containers
+  value: master
 - name: GRAFANA_INSTALL
   value: grafana-5.0.0-1.x86_64.rpm
   description: The grafana rpm
@@ -75,6 +75,16 @@ objects:
   kind: PersistentVolumeClaim
   metadata:
     name: grafana-log
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: ${STORAGE_SIZE}
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: grafana-share
   spec:
     accessModes:
       - ReadWriteOnce
@@ -174,6 +184,8 @@ objects:
             name: grafana-lib
           - mountPath: /var/log/grafana
             name: grafana-log
+          - mountPath: /usr/share/grafana
+            name: grafana-share
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         terminationGracePeriodSeconds: 30
@@ -184,6 +196,9 @@ objects:
         - name: grafana-log
           persistentVolumeClaim:
             claimName: grafana-log
+        - name: grafana-share
+          persistentVolumeClaim:
+            claimName: grafana-share
   status: {}
 - apiVersion: v1
   kind: Route
