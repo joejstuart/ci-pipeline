@@ -154,7 +154,7 @@ objects:
           - name: INFLUXDB_UDP_DATABASE
             value: udp
           - name: INFLUXDB_HTTP_AUTH_ENABLED
-            value: true
+            value: "true"
           image: influxdb:stable
           imagePullPolicy: Always
           name: influxdb
