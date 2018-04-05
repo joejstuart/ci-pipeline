@@ -22,6 +22,10 @@ try {
  */
 class ciMetrics {
 
+    // fields to store in the jenkins_custom_data measurement
+    def customData = [:]
+    // tags to store in the jenkins_custom_data measurement
+    def customDataTags = [:]
     // A map to store the data sent to influx
     def customDataMap = ["ci_pipeline": [:]]
     // Global tags
@@ -41,13 +45,13 @@ class ciMetrics {
      */
     def timed(String name, Closure body) {
 		customDataMap[measurement][name] = cimetrics.timed(body)
-
     }
 
     /**
      * Write customDataMap to influxDB
      */
     def writeToInflux() {
-        cimetrics.writeToInflux(influxTarget, prefix, customDataMap, customDataMapTags)
+        cimetrics.writeToInflux(influxTarget, prefix, customDataMap,
+                customDataMapTags, customData, customDataTags)
     }
 }

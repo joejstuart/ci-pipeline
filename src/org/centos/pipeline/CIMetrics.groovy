@@ -6,9 +6,11 @@ package org.centos.pipeline
  * @param prefix - any name to prefix the data
  * @param customDataMap - the data to be written to influx
  */
-def writeToInflux(String influxTarget, String prefix, Map customDataMap, Map customDataMapTags) {
+def writeToInflux(String influxTarget, String prefix, Map customDataMap,
+                  Map customDataMapTags, Map customData, Map customDataTags) {
     step([$class: 'InfluxDbPublisher',
-          customData: [:],
+          customData: customData,
+          customDataTags: customDataTags,
           customDataMap: customDataMap,
           customDataMapTags: customDataMapTags,
           customPrefix: prefix,
