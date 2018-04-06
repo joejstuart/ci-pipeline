@@ -47,7 +47,7 @@ class ciMetrics {
      * @param body - the enclosing step body
      */
     def timed(String name, Closure body) {
-        customDataMap[jobMeasurement][name] = cimetrics.timed(body)
+        customDataMap["blah"][name] = cimetrics.timed(body)
     }
 
     /**
