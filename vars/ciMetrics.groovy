@@ -30,9 +30,9 @@ class ciMetrics {
     // fields to store in the jenkins_custom_data measurement
     def customData = [:]
     // tags to store in the jenkins_custom_data measurement
-    def customDataTags = [jobMeasurement: [:]]
+    def customDataTags = [:]
     // A map to store the data sent to influx
-    def customDataMap = [jobMeasurement: [:]]
+    def customDataMap = [:]
     // Global tags
     def customDataMapTags = [:]
     // This will prefix the data sent to influx. Usually set to the job name.
