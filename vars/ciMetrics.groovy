@@ -36,7 +36,7 @@ class ciMetrics {
     // Global tags
     def customDataMapTags = ["ci_pipeline": [:]]
     // This will prefix the data sent to influx. Usually set to the job name.
-    def prefix = jobMeasurement
+    def prefix = "ci_pipeline"
     // The influx target configured in jenkins
     def influxTarget = "localInflux"
 
