@@ -25,7 +25,7 @@ class ciMetrics {
     // fields to store in the jenkins_custom_data measurement
     def customData = [:]
     // tags to store in the jenkins_custom_data measurement
-    def customDataTags = [:]
+    def customDataTags = ["ci_pipeline": [:]]
     // A map to store the data sent to influx
     def customDataMap = ["ci_pipeline": [:]]
     // Global tags
@@ -34,9 +34,12 @@ class ciMetrics {
     def prefix = "ci_pipeline"
     // The influx target configured in jenkins
     def influxTarget = "localInflux"
-    // The influx database that will be written to
-    def measurement = "ci_pipeline"
+
+    def defaultMeasurement = env.JOB_NAME
+
     def cimetrics = new CIMetrics()
+
+    def timedSteps = [:]
 
     /**
      * Call this method to record the step run time
@@ -44,7 +47,45 @@ class ciMetrics {
      * @param body - the enclosing step body
      */
     def timed(String name, Closure body) {
-		customDataMap[measurement][name] = cimetrics.timed(body)
+        setCustomDataMap(name, cimetrics.timed(body))
+    }
+
+    /**
+     *
+     * @param key
+     * @param value
+     * @param measurement
+     * @return
+     */
+    def setCustomDataMap(String key, def value, String measurement=null) {
+        if (measurement == null) {
+            measurement = defaultMeasurement
+        }
+
+        if (!customDataMap[measurement]) {
+            customDataMap[measurement] = [:]
+        }
+
+        customDataMap[measurement][key] = value
+    }
+
+    /**
+     *
+     * @param key
+     * @param value
+     * @param measurement
+     * @return
+     */
+    def setCustomDataMapTags(String key, String value, String measurement=null) {
+        if (measurement == null) {
+            measurement = defaultMeasurement
+        }
+
+        if (!customDataMapTags[measurement]) {
+            customDataMapTags[measurement] = [:]
+        }
+
+        customDataMapTags[measurement][key] = value
     }
 
     /**
@@ -54,4 +95,5 @@ class ciMetrics {
         cimetrics.writeToInflux(influxTarget, prefix, customDataMap,
                 customDataMapTags, customData, customDataTags)
     }
+    
 }
