@@ -25,7 +25,7 @@ class ciMetrics {
 
     def cimetrics = new CIMetrics()
 
-    def jobMeasurement = cimetrics.defaultMeasurement()
+    def jobMeasurement = "blah"
 
     // fields to store in the jenkins_custom_data measurement
     def customData = [:]
