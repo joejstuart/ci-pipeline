@@ -55,6 +55,7 @@ class ciMetrics {
      * @return
      */
     def setTimedData(String measurement) {
+        measurement = "jenkins_job_${measurement}"
         customDataMap[measurement] = timedData
     }
 
