@@ -33,3 +33,7 @@ def timed(Closure body) {
     return now - start
 
 }
+
+def defaultMeasurement() {
+    return env.JOB_NAME
+}

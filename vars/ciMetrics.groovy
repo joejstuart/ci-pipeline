@@ -22,24 +22,24 @@ try {
  */
 class ciMetrics {
 
-    // fields to store in the jenkins_custom_data measurement
-    def customData = [:]
-    // tags to store in the jenkins_custom_data measurement
-    def customDataTags = ["ci_pipeline": [:]]
-    // A map to store the data sent to influx
-    def customDataMap = ["ci_pipeline": [:]]
-    // Global tags
-    def customDataMapTags = [:]
-    // This will prefix the data sent to influx. Usually set to the job name.
-    def prefix = "ci_pipeline"
-    // The influx target configured in jenkins
-    def influxTarget = "localInflux"
-
-    def defaultMeasurement = env.JOB_NAME
 
     def cimetrics = new CIMetrics()
 
-    def timedSteps = [:]
+    def jobMeasurement = cimetrics.defaultMeasurement()
+
+    // fields to store in the jenkins_custom_data measurement
+    def customData = [:]
+    // tags to store in the jenkins_custom_data measurement
+    def customDataTags = [jobMeasurement: [:]]
+    // A map to store the data sent to influx
+    def customDataMap = [jobMeasurement: [:]]
+    // Global tags
+    def customDataMapTags = [:]
+    // This will prefix the data sent to influx. Usually set to the job name.
+    def prefix = jobMeasurement
+    // The influx target configured in jenkins
+    def influxTarget = "localInflux"
+
 
     /**
      * Call this method to record the step run time
@@ -47,7 +47,7 @@ class ciMetrics {
      * @param body - the enclosing step body
      */
     def timed(String name, Closure body) {
-        setCustomDataMap(name, cimetrics.timed(body))
+        customDataMap[jobMeasurement][name] = cimetrics.timed(body)
     }
 
     /**
@@ -57,11 +57,7 @@ class ciMetrics {
      * @param measurement
      * @return
      */
-    def setCustomDataMap(String key, def value, String measurement=null) {
-        if (measurement == null) {
-            measurement = defaultMeasurement
-        }
-
+    def setMetricField(String measurement, String key, def value) {
         if (!customDataMap[measurement]) {
             customDataMap[measurement] = [:]
         }
@@ -76,11 +72,7 @@ class ciMetrics {
      * @param measurement
      * @return
      */
-    def setCustomDataMapTags(String key, String value, String measurement=null) {
-        if (measurement == null) {
-            measurement = defaultMeasurement
-        }
-
+    def setMetricTag(String measurement, String key, String value) {
         if (!customDataMapTags[measurement]) {
             customDataMapTags[measurement] = [:]
         }
