@@ -25,8 +25,6 @@ class ciMetrics {
 
     def cimetrics = new CIMetrics()
 
-    def jobMeasurement = "blah"
-
     // fields to store in the jenkins_custom_data measurement
     def customData = [:]
     // tags to store in the jenkins_custom_data measurement
@@ -40,6 +38,7 @@ class ciMetrics {
     // The influx target configured in jenkins
     def influxTarget = "localInflux"
 
+    def timedData = [:]
 
     /**
      * Call this method to record the step run time
@@ -47,7 +46,16 @@ class ciMetrics {
      * @param body - the enclosing step body
      */
     def timed(String name, Closure body) {
-        customDataMap["ci_pipeline"][name] = cimetrics.timed(body)
+        timedData[name] = cimetrics.timed(body)
+    }
+
+    /**
+     *
+     * @param measurement
+     * @return
+     */
+    def setTimedData(String measurement) {
+        customDataMap[measurement] = timedData
     }
 
     /**
