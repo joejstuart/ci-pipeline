@@ -32,9 +32,9 @@ class ciMetrics {
     // tags to store in the jenkins_custom_data measurement
     def customDataTags = [:]
     // A map to store the data sent to influx
-    def customDataMap = [:]
+    def customDataMap = ["ci_pipeline": [:]]
     // Global tags
-    def customDataMapTags = [:]
+    def customDataMapTags = ["ci_pipeline": [:]]
     // This will prefix the data sent to influx. Usually set to the job name.
     def prefix = jobMeasurement
     // The influx target configured in jenkins
