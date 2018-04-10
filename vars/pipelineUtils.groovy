@@ -320,7 +320,7 @@ class pipelineUtils implements Serializable {
     }
 
     def testMetric() {
-        pipelineUtils.setMetric()
+        pipelineUtils.testMetric()
     }
 
 }
