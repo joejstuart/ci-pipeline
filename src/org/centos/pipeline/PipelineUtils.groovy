@@ -1136,3 +1136,7 @@ def checkTestResults(def testResults) {
 
     return buildResult
 }
+
+def testMetric() {
+    ciMetrics.setMetricTag('mymeasurement', 'mykey', 'myvalue')
+}
