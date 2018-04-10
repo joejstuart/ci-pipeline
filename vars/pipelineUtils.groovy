@@ -319,4 +319,8 @@ class pipelineUtils implements Serializable {
         return pipelineUtils.checkTestResults(testResults)
     }
 
+    def testMetric() {
+        pipelineUtils.setMetric()
+    }
+
 }
