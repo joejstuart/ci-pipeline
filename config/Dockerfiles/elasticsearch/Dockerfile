@@ -37,9 +37,7 @@ RUN set -x \
 	\
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends "elasticsearch=$ELASTICSEARCH_VERSION" \
-	&& rm -rf /var/lib/apt/lists/* \
-    && groupadd elasticsearch \
-    && useradd elasticsearch -g elasticsearch
+	&& rm -rf /var/lib/apt/lists/*
 
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 
