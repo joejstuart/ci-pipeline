@@ -38,7 +38,7 @@ RUN set -x \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends "elasticsearch=$ELASTICSEARCH_VERSION" \
 	&& rm -rf /var/lib/apt/lists/* \
-    && sysctl -w vm.max_map_count=262144
+    && echo "vm.max_map_count=262144" >> /etc/sysctl.conf
 
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 
