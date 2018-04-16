@@ -14,6 +14,9 @@ metadata:
     template.openshift.io/documentation-url: https://docs.openshift.org/latest
     template.openshift.io/support-url: https://access.redhat.com
 parameters:
+- name: INSTANCE_NAME
+  description: ES Instance name
+  required: true
 - name: STORAGE_SIZE
   value: 10Gi
   description: The size of the persistent storage for Elasticsearch
@@ -40,7 +43,7 @@ objects:
 - apiVersion: v1
   kind: BuildConfig
   metadata:
-    name: elasticsearch
+    name: "${INSTANCE_NAME}"
   spec:
     output:
       to:
@@ -64,7 +67,7 @@ objects:
 - kind: PersistentVolumeClaim
   apiVersion: v1
   metadata:
-    name: elasticsearch-data
+    name: "${INSTANCE_NAME}-data"
   spec:
     accessModes:
       - ReadWriteOnce
@@ -75,15 +78,15 @@ objects:
   apiVersion: v1
   metadata:
     labels:
-      route: elasticsearch
-    name: elasticsearch
+      route: "elasticsearch-${INSTANCE_NAME}"
+    name: "${INSTANCE_NAME}"
     creationTimestamp:
   spec:
     port:
       targetPort: api-http
     to:
       kind: Service
-      name: elasticsearch
+      name: "${INSTANCE_NAME}"
     tls:
       termination: edge
       insecureEdgeTerminationPolicy: Redirect
@@ -92,8 +95,8 @@ objects:
   metadata:
     creationTimestamp: null
     labels:
-      metrics: elasticsearch
-    name: elasticsearch
+      metrics: "elasticsearch-${INSTANCE_NAME}"
+    name: "${INSTANCE_NAME}"
   spec:
     ports:
     - name: api-http
@@ -115,8 +118,8 @@ objects:
   metadata:
     creationTimestamp: null
     labels:
-      metrics: elasticsearch
-    name: elasticsearch
+      metrics: "elasticsearch-${INSTANCE_NAME}"
+    name: "${INSTANCE_NAME}"
   spec:
     strategy:
         type: Recreate
@@ -134,17 +137,19 @@ objects:
     - type: ConfigChange
     replicas: 1
     selector:
-      metrics: elasticsearch
+      metrics: "elasticsearch-${INSTANCE_NAME}"
     template:
       metadata:
         creationTimestamp: null
         labels:
-          metrics: elasticsearch
+          metrics: elasticsearch-${INSTANCE_NAME}
       spec:
         containers:
         - env:
           - name: ELASTICSEARCH_VERSION
             value: ${ELASTICSEARCH_VERSION}
+          - name: CLUSTER_NAME
+            value: contra
           image: elasticsearch:stable
           imagePullPolicy: Always
           name: elasticsearch
@@ -175,13 +180,13 @@ objects:
             protocol: TCP
           volumeMounts:
           - mountPath: /usr/share/elasticsearch/data
-            name: elasticsearch-data
+            name: "${INSTANCE_NAME}-data"
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         volumes:
-        - name: elasticsearch-data
+        - name: "${INSTANCE_NAME}-data"
           persistentVolumeClaim:
-            claimName: elasticsearch-data
+            claimName: "${INSTANCE_NAME}-data"
   status: {}
 labels:
   template: elasticsearch
