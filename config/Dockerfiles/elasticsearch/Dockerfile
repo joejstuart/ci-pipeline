@@ -36,7 +36,6 @@ RUN set -x \
 	&& dpkg-divert --rename /usr/lib/sysctl.d/elasticsearch.conf \
 	\
 	&& apt-get update \
-    && apt-get install -y procps \
 	&& apt-get install -y --no-install-recommends "elasticsearch=$ELASTICSEARCH_VERSION" \
 	&& rm -rf /var/lib/apt/lists/*
 
