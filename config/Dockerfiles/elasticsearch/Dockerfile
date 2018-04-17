@@ -36,9 +36,9 @@ RUN set -x \
 	&& dpkg-divert --rename /usr/lib/sysctl.d/elasticsearch.conf \
 	\
 	&& apt-get update \
+    && apt-get install procps \
 	&& apt-get install -y --no-install-recommends "elasticsearch=$ELASTICSEARCH_VERSION" \
-	&& rm -rf /var/lib/apt/lists/* \
-    && echo "vm.max_map_count=262144" >> /usr/lib/sysctl.d/elasticsearch.conf
+	&& rm -rf /var/lib/apt/lists/*
 
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 
