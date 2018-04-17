@@ -1,4 +1,4 @@
-network.host: _site_
+network.host: $OPENSHIFT_INTERNAL_IP
 
 cluster.name: contra-es
 
