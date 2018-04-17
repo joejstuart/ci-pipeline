@@ -28,7 +28,7 @@ parameters:
   value: config/Dockerfiles/elasticsearch
 - name: REPO_REF
   description: The git ref or tag to use for customization.
-  value: es
+  value: newes
 - name: ELASTICSEARCH_VERSION
   value: 5.6.8
   description: The es version
@@ -38,12 +38,15 @@ objects:
   metadata:
     annotations:
     labels:
+      component: elasticsearch
     name: elasticsearch
   spec: {}
 - apiVersion: v1
   kind: BuildConfig
   metadata:
     name: "${INSTANCE_NAME}"
+    labels: 
+      component: elasticsearch
   spec:
     output:
       to:
@@ -79,6 +82,7 @@ objects:
   metadata:
     labels:
       route: "elasticsearch-${INSTANCE_NAME}"
+      component: elasticsearch
     name: "${INSTANCE_NAME}"
     creationTimestamp:
   spec:
@@ -86,39 +90,17 @@ objects:
       targetPort: api-http
     to:
       kind: Service
-      name: "${INSTANCE_NAME}"
+      name: elasticsearch-api
     tls:
       termination: edge
       insecureEdgeTerminationPolicy: Redirect
-- apiVersion: v1
-  kind: Service
-  metadata:
-    creationTimestamp: null
-    labels:
-      metrics: "elasticsearch-${INSTANCE_NAME}"
-    name: "${INSTANCE_NAME}"
-  spec:
-    ports:
-    - name: api-http
-      port: 9200
-      protocol: TCP
-      targetPort: 9200
-    - name: admin-http
-      port: 9300
-      protocol: TCP
-      targetPort: 9300
-    selector:
-      metrics: elasticsearch
-    sessionAffinity: None
-    type: ClusterIP
-  status:
-    loadBalancer: {}
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
     creationTimestamp: null
     labels:
       metrics: "elasticsearch-${INSTANCE_NAME}"
+      component: elasticsearch
     name: "${INSTANCE_NAME}"
   spec:
     strategy:
@@ -138,11 +120,13 @@ objects:
     replicas: 1
     selector:
       metrics: "elasticsearch-${INSTANCE_NAME}"
+      component: elasticsearch
     template:
       metadata:
         creationTimestamp: null
         labels:
           metrics: elasticsearch-${INSTANCE_NAME}
+          component: elasticsearch
       spec:
         containers:
         - env:
@@ -174,10 +158,12 @@ objects:
             successThreshold: 1
             timeoutSeconds: 1
           ports:
-          - containerPort: 9200
-            protocol: TCP
-          - containerPort: 9300
-            protocol: TCP
+            - name: http
+              containerPort: 9200
+              protocol: TCP
+            - name: transport
+              containerPort: 9300
+              protocol: TCP
           volumeMounts:
           - mountPath: /usr/share/elasticsearch/data
             name: "${INSTANCE_NAME}-data"
