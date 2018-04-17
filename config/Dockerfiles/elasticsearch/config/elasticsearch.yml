@@ -1,8 +1,8 @@
 http.host: 0.0.0.0
 
-cluster.name: ${CLUSTER_NAME}
+cluster.name: contra-es
 
 # Uncomment the following lines for a production cluster deployment
 transport.host: 0.0.0.0
-discovery.zen.ping.unicast.hosts: "es1-continuous-infra.192.168.42.226.nip.io,es2-continuous-infra.192.168.42.226.nip.io,es3-continuous-infra.192.168.42.226.nip.io"
+discovery.zen.ping.unicast.hosts: elasticsearch-discovery
 discovery.zen.minimum_master_nodes: 1
