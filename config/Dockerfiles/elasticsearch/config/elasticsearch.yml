@@ -6,5 +6,5 @@ network.host: _site_
 
 # Uncomment the following lines for a production cluster deployment
 #transport.host: 0.0.0.0
-discovery.zen.minimum_master_nodes: 2
+discovery.zen.minimum_master_nodes: 3
 discovery.zen.ping.unicast.hosts: elasticsearch-discovery
