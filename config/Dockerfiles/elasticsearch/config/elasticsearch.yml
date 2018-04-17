@@ -3,6 +3,6 @@ http.host: 0.0.0.0
 cluster.name: contra-es
 
 # Uncomment the following lines for a production cluster deployment
-transport.host: 0.0.0.0
+#transport.host: 0.0.0.0
 discovery.zen.ping.unicast.hosts: elasticsearch-discovery
-discovery.zen.minimum_master_nodes: 1
+#discovery.zen.minimum_master_nodes: 0
