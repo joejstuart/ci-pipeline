@@ -21,7 +21,7 @@ function archive_variables {
     cat << EOF > ${LOGDIR}/job.props
 koji_task_id=${PROVIDED_KOJI_TASKID}
 fed_repo=${PACKAGE}
-fed_branch=${BRANCH}
+fed_branch=${FED_BRANCH}
 branch=${BRANCH}
 fed_rev=kojitask-${PROVIDED_KOJI_TASKID}
 nvr=${NVR}
@@ -50,9 +50,11 @@ mv somewhere/* ${RPMDIR}/
 
 # build target is rawhide or f**-candidate
 if [ $TARGET_BRANCH == "rawhide" ]; then
+    FED_BRANCH=$TARGET_BRANCH
     BRANCH="master"
 else
     BRANCH="$(echo $TARGET_BRANCH |sed -E "s/-.*//")"
+    FED_BRANCH=$BRANCH
 fi
 
 # Let's archive the logs too

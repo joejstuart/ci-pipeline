@@ -68,7 +68,7 @@ fi
 
 # Checkout proper branch of kickstarts
 pushd ${base_dir}/fedora-kickstarts
-git checkout ${fed_branch}
+git checkout ${branch}
 popd
 
 # The centos7 pykickstart rpm doesnt support --noboot being in the .ks file
@@ -96,8 +96,10 @@ else
 fi
 
 # We no longer need the f in fXX
-if [ ${branch} != "rawhide" ]; then
-    branch=${branch:1}
+if [ ${fed_branch} != "rawhide" ]; then
+    branch=${fed_branch:1}
+else
+    branch=${fed_branch}
 fi
 
 # Define proper install url
