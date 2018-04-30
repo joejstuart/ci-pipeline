@@ -390,4 +390,24 @@ class pipelineUtils implements Serializable {
         pipelineUtils.repoFromRequest(request, prefix)
     }
 
+    /**
+     *
+     * @param repo - the package name. (e.g. fed_repo, contra_repo)
+     * @param prNum - the PR number
+     * @return
+     */
+    def checkoutGitPR(String repo, Int prNum) {
+        pipelineUtils.checkoutGitPR(repo, prNum)
+    }
+/**
+ *
+ * @param repo - the package name. (e.g. fed_repo, contra_repo)
+ * @param branch - the branch to checkout. (e.g. fed_branch, contra_branch)
+ * @param rev - the nvr
+ * @return
+ */
+    def checkoutGitRev(String repo, String branch, String rev) {
+        pipelineUtils.checkoutGitRev(repo, branch, rev)
+    }
+
 }

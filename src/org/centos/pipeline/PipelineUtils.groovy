@@ -1339,3 +1339,34 @@ def repoFromRequest(String request, String prefix) {
         throw e
     }
 }
+
+/**
+ *
+ * @param repo - the package name. (e.g. fed_repo, contra_repo)
+ * @param prNum - the PR number
+ * @return
+ */
+def checkoutGitPR(String repo, Int prNum) {
+    sh "git clone --depth 1 https://src.fedoraproject.org/rpms/${repo}"
+
+    dir($repo)
+
+    sh "git fetch -fu origin refs/pull/${prNum}/head:pr"
+    sh 'git checkout pr'
+}
+
+/**
+ *
+ * @param repo - the package name. (e.g. fed_repo, contra_repo)
+ * @param branch - the branch to checkout. (e.g. fed_branch, contra_branch)
+ * @param rev - the nvr
+ * @return
+ */
+def checkoutGitRev(String repo, String branch, String rev) {
+    sh "git clone --depth 1 https://src.fedoraproject.org/rpms/${repo}"
+
+    dir($repo)
+
+    sh "git checkout ${branch}"
+    sh "git checkout ${rev}"
+}
