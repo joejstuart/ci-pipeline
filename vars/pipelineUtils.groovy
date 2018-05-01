@@ -396,7 +396,7 @@ class pipelineUtils implements Serializable {
      * @param prNum - the PR number
      * @return
      */
-    def checkoutGitPR(String repo, Int prNum) {
+    def checkoutGitPR(String repo, String prNum) {
         pipelineUtils.checkoutGitPR(repo, prNum)
     }
 /**

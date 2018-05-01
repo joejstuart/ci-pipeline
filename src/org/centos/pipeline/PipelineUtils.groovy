@@ -1346,7 +1346,7 @@ def repoFromRequest(String request, String prefix) {
  * @param prNum - the PR number
  * @return
  */
-def checkoutGitPR(String repo, Int prNum) {
+def checkoutGitPR(String repo, String prNum) {
     sh "git clone --depth 1 https://src.fedoraproject.org/rpms/${repo}"
 
     dir($repo)
