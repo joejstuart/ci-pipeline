@@ -1349,7 +1349,7 @@ def repoFromRequest(String request, String prefix) {
 def checkoutGitPR(String repo, String prNum) {
     sh "git clone --depth 1 https://src.fedoraproject.org/rpms/${repo}"
 
-    dir($repo)
+    dir(repo)
 
     sh "git fetch -fu origin refs/pull/${prNum}/head:pr"
     sh 'git checkout pr'
@@ -1365,7 +1365,7 @@ def checkoutGitPR(String repo, String prNum) {
 def checkoutGitRev(String repo, String branch, String rev) {
     sh "git clone --depth 1 https://src.fedoraproject.org/rpms/${repo}"
 
-    dir($repo)
+    dir(repo)
 
     sh "git checkout ${branch}"
     sh "git checkout ${rev}"
