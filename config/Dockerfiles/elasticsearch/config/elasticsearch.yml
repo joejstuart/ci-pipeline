@@ -9,3 +9,5 @@ network.host: _site_
 discovery.zen.minimum_master_nodes: 2
 discovery.zen.ping.unicast.hosts: ["elasticsearch-discovery"]
 discovery.zen.ping_timeout: 15s
+
+logger.org.elasticsearch.transport: trace
