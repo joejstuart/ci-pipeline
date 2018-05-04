@@ -4,7 +4,8 @@ cluster:
 node:
   master: ${NODE_MASTER}
   data: ${NODE_DATA}
-  name: ${NODE_NAME}
+  #  name: ${NODE_NAME}
+  name: ${HOSTNAME}
   ingest: ${NODE_INGEST}
   max_local_storage_nodes: 1
 
