@@ -14,8 +14,8 @@ network.host: ${NETWORK_HOST}
 #  data: /data/data
 #  logs: /data/log
 
-bootstrap:
-  memory_lock: true
+#bootstrap:
+#  memory_lock: true
 
 http:
   enabled: ${HTTP_ENABLE}
