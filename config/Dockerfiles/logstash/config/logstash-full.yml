@@ -1,3 +1,1 @@
 http.host: "0.0.0.0"
-xpack.monitoring.enabled: "false"
-xpack.monitoring.elasticsearch.url: https://${ELASTICSEARCH_URL}:9200
