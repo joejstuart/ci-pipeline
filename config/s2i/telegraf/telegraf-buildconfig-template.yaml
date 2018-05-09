@@ -22,6 +22,12 @@ parameters:
 - name: INFLUXDB_DATABASE
   value: db0
   description: The influxdb to use
+- name: INFLUXDB_USER
+  value: influxdbuser
+  description: The username for influxdb auth
+- name: INFLUXDB_PASSWORD
+  value: influxdbpassword
+  description: The passwor for influxdb auth
 - name: JENKINS_METRICS_ENDPOINT
   value: https://jenkins-continuous-infra.192.168.42.226.nip.io/metrics
   description: The jenkins metrics endpoint
@@ -42,7 +48,7 @@ parameters:
   value: config/Dockerfiles/telegraf
 - name: REPO_REF
   description: The git ref or tag to use for customization.
-  value: containers
+  value: master
 - name: TELEGRAF_INSTALL
   value: telegraf-1.5.2-1.x86_64.rpm
   description: The telegraf rpm
@@ -105,6 +111,10 @@ objects:
             value: ${INFLUXDB_DATABASE}
           - name: JENKINS_METRICS_ENDPOINT
             value: ${JENKINS_METRICS_ENDPOINT}/${JENKINS_API_KEY}/${JENKINS_ENDPOINT_TYPE}
+          - name: INFLUXDB_USER
+            value: ${INFLUXDB_USER}
+          - name: INFLUXDB_PASSWORD
+            value: ${INFLUXDB_PASSWORD}
           image: telegraf:stable
           imagePullPolicy: Always
           name: telegraf
