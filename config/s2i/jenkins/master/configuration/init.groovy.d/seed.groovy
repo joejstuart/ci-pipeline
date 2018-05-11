@@ -8,7 +8,7 @@ import javaposse.jobdsl.plugin.JenkinsJobManagement
 import java.util.logging.Logger
 
 env = System.getenv()
-JENKINS_SETUP_YAML = env['JENKINS_SETUP_YAML'] ?: "${env['JENKINS_CONFIG_HOME']}/setup.yml"
+JENKINS_SETUP_YAML = env['JENKINS_SETUP_YAML'] ?: "${env['JENKINS_HOME']}/setup.yaml"
 config = new Yaml().load(new File(JENKINS_SETUP_YAML).text)
 Logger logger = Logger.getLogger('seed.groovy')
 
@@ -19,7 +19,6 @@ Thread.start {
     // workspace.mkdirs()
     // def seedJobDsl = new File("${WORKSPACE_BASE}/seed.groovy")
     def seedJobDsl = config.seed_jobdsl
-    logger.info(initJobDsl)
 
     def jobManagement = new JenkinsJobManagement(System.out, [:], workspace)
     new DslScriptLoader(jobManagement).runScript(seedJobDsl)

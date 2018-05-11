@@ -2,9 +2,11 @@
 seed_jobdsl: |
   pipelineJob("seed") {
       description('This job is automagically generated.')
-      cpsScm {
-          scm {
-              git('https://github.com/joejstuart/ci-pipeline.git')
+      definition {
+          cpsScm {
+              scm {
+                  git('https://github.com/joejstuart/ci-pipeline.git')
+              }
           }
       }
   }
