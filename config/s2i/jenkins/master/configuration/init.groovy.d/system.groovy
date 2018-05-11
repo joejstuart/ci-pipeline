@@ -3,12 +3,14 @@ import jenkins.security.s2m.*
 import jenkins.model.*;
 import com.redhat.jenkins.plugins.ci.*
 import com.redhat.jenkins.plugins.ci.messaging.*
+import hudson.security.*
 
 def logger = Logger.getLogger("")
 logger.info("Disabling CLI over remoting")
 jenkins.CLI.get().setEnabled(false);
 logger.info("Enable Slave -> Master Access Control")
 Jenkins.instance.injector.getInstance(AdminWhitelistRule.class).setMasterKillSwitch(false);
+jenkins.instance.setAuthorizationStrategy(AuthorizationStrategy.Unsecured)
 Jenkins.instance.save()
 
 logger.info("Setup fedora-fedmsg Messaging Provider")
