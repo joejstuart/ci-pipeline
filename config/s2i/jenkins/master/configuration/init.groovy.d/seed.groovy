@@ -8,7 +8,7 @@ import javaposse.jobdsl.plugin.JenkinsJobManagement
 import java.util.logging.Logger
 
 env = System.getenv()
-JENKINS_SETUP_YAML = env['JENKINS_SETUP_YAML'] ?: "${env['JENKINS_CONFIG_HOME']}/setup.yml"
+JENKINS_SETUP_YAML = env['JENKINS_SETUP_YAML'] ?: "${env['JENKINS_HOME']}/setup.yml"
 config = new Yaml().load(new File(JENKINS_SETUP_YAML).text)
 Logger logger = Logger.getLogger('seed.groovy')
 
