@@ -1,3 +1,4 @@
+---
 seed_jobdsl: |
   pipelineJob("seed") {
       description('This job is automagically generated.')
