@@ -14,7 +14,7 @@ Logger logger = Logger.getLogger('seed.groovy')
 
 
 Thread.start {
-    WORKSPACE_BASE = "${env['JENKINS_HOME']}/workspace"
+    WORKSPACE_BASE = "${env['JENKINS_HOME']}"
     def workspace = new File("${WORKSPACE_BASE}")
     // workspace.mkdirs()
     // def seedJobDsl = new File("${WORKSPACE_BASE}/seed.groovy")
