@@ -40,16 +40,10 @@ env = System.getenv()
 JENKINS_SETUP_YAML = env['JENKINS_SETUP_YAML'] ?: "${env['JENKINS_HOME']}/setup.yml"
 config = new Yaml().load(new File(JENKINS_SETUP_YAML).text)
 Logger logger = Logger.getLogger('seed.groovy')
-//def strategy = new GlobalMatrixAuthorizationStrategy()
-//strategy.add(hudson.model.Item.CREATE,'anonymous')
-//Jenkins.instance.setAuthorizationStrategy(strategy)
-//Jenkins.instance.save()
 
 Thread.start {
     WORKSPACE_BASE = "${env['JENKINS_HOME']}"
     def workspace = new File("${WORKSPACE_BASE}")
-    // workspace.mkdirs()
-    // def seedJobDsl = new File("${WORKSPACE_BASE}/seed.groovy")
     def seedJobDsl = config.seed_jobdsl
 
     def jobManagement = new JenkinsJobManagement(System.out, [:], workspace)

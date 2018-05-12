@@ -1,13 +1,15 @@
 ---
 seed_jobdsl: |
-  pipelineJob("seed") {
-      description('This job is automagically generated.')
-      definition {
-          cpsScm {
-              scm {
-                  git('https://github.com/joejstuart/ci-pipeline.git')
-              }
-              scriptPath('JenkinsfileDSL')
+  job("seed") {
+      scm {
+          git('https://github.com/joejstuart/ci-pipeline.git')
+      }
+      steps {
+          dsl {
+              external('jobs/*.groovy')
+              removeAction('DELETE')
+              ignoreExisting()
+              additionalClasspath('src/org/centos/dsl')
           }
       }
   }
