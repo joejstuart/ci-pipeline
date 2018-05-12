@@ -1,14 +1,14 @@
 package org.centos.dsl
 
 
-class jenkinsJobTrigger {
+class stageJob {
 
     def instance
     def name
     def gitUrl
     def gitBranch = 'master'
 
-    static def createJob() {
+    def createJob() {
        instance.pipelineJob(name) {
            description('Job created from job dsl')
            definition {

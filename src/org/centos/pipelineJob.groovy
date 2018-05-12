@@ -1,11 +1,12 @@
-class jenkinsJob {
+class pipelineJob {
 
     def instance
     def name
     def gitUrl
     def gitBranch = 'master'
+    def Jenkinsfile
 
-    static def createJob() {
+    def createJob() {
        instance.pipelineJob(name) {
            description('Job created from job dsl')
            definition {
