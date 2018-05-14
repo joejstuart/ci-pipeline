@@ -33,5 +33,7 @@ class pipelineJobTrigger {
            }
        }
 
+       instance.queue(name)
+
     }
 }
