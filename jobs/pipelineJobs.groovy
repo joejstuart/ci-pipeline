@@ -6,6 +6,6 @@ def pipelineJobs = ['fedora-f26': ['gitUrl': 'git@github.com:CentOS-PaaS-SIG/ci-
                    ]
 
 pipelineJobs.each { jobName, jobProps ->
-    pipelinejob = new pipelineJobTrigger(this, jobName, jobProps['gitUrl'])
+    pipelinejob = new pipelineJobTrigger(this, jobName, jobProps['gitUrl'], jobProps['branch'])
     pipelinejob.create()
 }
