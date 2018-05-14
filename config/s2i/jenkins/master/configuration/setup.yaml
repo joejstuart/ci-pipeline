@@ -13,6 +13,7 @@ seed_jobdsl: |
               removeAction('DELETE')
               ignoreExisting()
               additionalClasspath('src/org/centos/dsl')
+              sandbox(true)
           }
       }
   }
