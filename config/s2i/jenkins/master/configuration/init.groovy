@@ -5,7 +5,6 @@
 import org.yaml.snakeyaml.Yaml
 import javaposse.jobdsl.dsl.DslScriptLoader
 import javaposse.jobdsl.plugin.JenkinsJobManagement
-import java.util.logging.Logger
 import hudson.security.*
 import jenkins.*
 import jenkins.model.*
@@ -15,6 +14,9 @@ import com.redhat.jenkins.plugins.ci.*
 import com.redhat.jenkins.plugins.ci.messaging.*
 import javaposse.jobdsl.plugin.GlobalJobDslSecurityConfiguration
 import jenkins.model.GlobalConfiguration
+import org.jenkinsci.plugins.authorizeproject.*
+import org.jenkinsci.plugins.authorizeproject.strategy.*
+import jenkins.security.QueueItemAuthenticatorConfiguration
 
 
 def logger = Logger.getLogger("")
@@ -39,7 +41,32 @@ GlobalCIConfiguration.get().addMessageProvider(fedmsgDevel)
 logger.info("Setting Time Zone to be EST")
 System.setProperty('org.apache.commons.jelly.tags.fmt.timeZone', 'America/New_York')
 
-GlobalConfiguration.all().get(GlobalJobDslSecurityConfiguration.class).useScriptSecurity=false
+//GlobalConfiguration.all().get(GlobalJobDslSecurityConfiguration.class).useScriptSecurity=false
+
+def instance = Jenkins.getInstance()
+
+def strategyMap = [
+  (instance.getDescriptor(AnonymousAuthorizationStrategy.class).getId()): true, 
+  (instance.getDescriptor(TriggeringUsersAuthorizationStrategy.class).getId()): true,
+  (instance.getDescriptor(SpecificUsersAuthorizationStrategy.class).getId()): true,
+  (instance.getDescriptor(SystemAuthorizationStrategy.class).getId()): false
+]
+
+def authenticators = QueueItemAuthenticatorConfiguration.get().getAuthenticators()
+def configureProjectAuthenticator = true
+for(authenticator in authenticators) {
+  if(authenticator instanceof ProjectQueueItemAuthenticator) {
+    // only add if it does not already exist
+    configureProjectAuthenticator = false
+  }
+}
+
+if(configureProjectAuthenticator) {
+  authenticators.add(new ProjectQueueItemAuthenticator(strategyMap))
+}
+
+instance.save()
+
 env = System.getenv()
 JENKINS_SETUP_YAML = env['JENKINS_SETUP_YAML'] ?: "${env['JENKINS_HOME']}/setup.yaml"
 config = new Yaml().load(new File(JENKINS_SETUP_YAML).text)
