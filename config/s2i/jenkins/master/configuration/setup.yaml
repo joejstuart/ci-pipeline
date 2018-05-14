@@ -2,7 +2,10 @@
 seed_jobdsl: |
   job("seed") {
       scm {
-          git('https://github.com/joejstuart/ci-pipeline.git')
+          git(
+          'https://github.com/joejstuart/ci-pipeline.git',
+          'jobDsl',
+          {node -> node / 'extensions' << '' })
       }
       steps {
           dsl {
