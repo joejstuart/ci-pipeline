@@ -12,8 +12,7 @@ seed_jobdsl: |
               external('jobs/*.groovy')
               removeAction('DELETE')
               ignoreExisting()
-              additionalClasspath('src/org/centos/dsl')
-              sandbox(true)
+              additionalClasspath('src')
           }
       }
   }

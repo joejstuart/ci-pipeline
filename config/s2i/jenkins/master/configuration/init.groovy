@@ -13,6 +13,9 @@ import java.util.logging.Logger
 import jenkins.security.s2m.*
 import com.redhat.jenkins.plugins.ci.*
 import com.redhat.jenkins.plugins.ci.messaging.*
+import javaposse.jobdsl.plugin.GlobalJobDslSecurityConfiguration
+import jenkins.model.GlobalConfiguration
+
 
 def logger = Logger.getLogger("")
 logger.info("Disabling CLI over remoting")
@@ -36,6 +39,7 @@ GlobalCIConfiguration.get().addMessageProvider(fedmsgDevel)
 logger.info("Setting Time Zone to be EST")
 System.setProperty('org.apache.commons.jelly.tags.fmt.timeZone', 'America/New_York')
 
+GlobalConfiguration.all().get(GlobalJobDslSecurityConfiguration.class).useScriptSecurity=false
 env = System.getenv()
 JENKINS_SETUP_YAML = env['JENKINS_SETUP_YAML'] ?: "${env['JENKINS_HOME']}/setup.yaml"
 config = new Yaml().load(new File(JENKINS_SETUP_YAML).text)
