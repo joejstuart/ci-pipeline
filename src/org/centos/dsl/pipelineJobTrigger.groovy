@@ -6,7 +6,14 @@ class pipelineJobTrigger {
     def instance
     def name
     def gitUrl
-    def gitBranch = 'master'
+    def gitBranch
+
+    pipelineJobTrigger(instance, name, gitUrl, gitBranch) {
+        this.instance = instance
+        this.name = name
+        this.gitUrl = gitUrl
+        this.gitBranch = gitBranch
+    }
 
     def createJob() {
        instance.pipelineJob(name) {
