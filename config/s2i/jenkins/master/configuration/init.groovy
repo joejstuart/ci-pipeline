@@ -40,13 +40,13 @@ env = System.getenv()
 JENKINS_SETUP_YAML = env['JENKINS_SETUP_YAML'] ?: "${env['JENKINS_HOME']}/setup.yaml"
 config = new Yaml().load(new File(JENKINS_SETUP_YAML).text)
 
-Thread.start {
-    WORKSPACE_BASE = "${env['JENKINS_HOME']}"
-    def workspace = new File("${WORKSPACE_BASE}")
-    def seedJobDsl = config.seed_jobdsl
+//Thread.start {
+WORKSPACE_BASE = "${env['JENKINS_HOME']}"
+def workspace = new File("${WORKSPACE_BASE}")
+def seedJobDsl = config.seed_jobdsl
 
-    def jobManagement = new JenkinsJobManagement(System.out, [:], workspace)
-    new DslScriptLoader(jobManagement).runScript(seedJobDsl)
-    logger.info('Created first job')
-}
+def jobManagement = new JenkinsJobManagement(System.out, [:], workspace)
+new DslScriptLoader(jobManagement).runScript(seedJobDsl)
+logger.info('Created first job')
+//}
 
