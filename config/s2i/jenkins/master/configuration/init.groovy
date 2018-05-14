@@ -37,7 +37,7 @@ logger.info("Setting Time Zone to be EST")
 System.setProperty('org.apache.commons.jelly.tags.fmt.timeZone', 'America/New_York')
 
 env = System.getenv()
-JENKINS_SETUP_YAML = env['JENKINS_SETUP_YAML'] ?: "${env['JENKINS_HOME']}/setup.yml"
+JENKINS_SETUP_YAML = env['JENKINS_SETUP_YAML'] ?: "${env['JENKINS_HOME']}/setup.yaml"
 config = new Yaml().load(new File(JENKINS_SETUP_YAML).text)
 
 Thread.start {
