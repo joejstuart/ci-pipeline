@@ -15,7 +15,7 @@ class pipelineJobTrigger {
         this.gitBranch = gitBranch
     }
 
-    def createJob() {
+    def create() {
        instance.pipelineJob(name) {
            description('Job created from job dsl')
            definition {
