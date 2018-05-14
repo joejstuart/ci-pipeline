@@ -13,3 +13,4 @@ seed_jobdsl: |
           }
       }
   }
+  queue("seed")
