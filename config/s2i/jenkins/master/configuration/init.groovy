@@ -39,7 +39,6 @@ System.setProperty('org.apache.commons.jelly.tags.fmt.timeZone', 'America/New_Yo
 env = System.getenv()
 JENKINS_SETUP_YAML = env['JENKINS_SETUP_YAML'] ?: "${env['JENKINS_HOME']}/setup.yml"
 config = new Yaml().load(new File(JENKINS_SETUP_YAML).text)
-Logger logger = Logger.getLogger('seed.groovy')
 
 Thread.start {
     WORKSPACE_BASE = "${env['JENKINS_HOME']}"
