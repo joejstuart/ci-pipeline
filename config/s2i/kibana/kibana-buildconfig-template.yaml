@@ -1,0 +1,190 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: kibana
+  annotations:
+    openshift.io/display-name: kibana
+    description: |-
+              contra kibana template
+    iconClass: icon-jenkins
+    tags: instant-app,kibana
+    template.openshift.io/long-description: Kibana container
+    template.openshift.io/provider-display-name: Red Hat, Inc.
+    template.openshift.io/documentation-url: https://docs.openshift.org/latest
+    template.openshift.io/support-url: https://access.redhat.com
+parameters:
+  description: The size of the persistent storage for Influxdb
+- name: REPO_URL
+  value: https://github.com/CentOS-PaaS-SIG/ci-pipeline.git
+  description: The dockerfile repo url
+- name: REPO_CONTEXTDIR
+  description: The sub-directory inside the repository.
+  value: config/Dockerfiles/kibana
+- name: REPO_REF
+  description: The git ref or tag to use for customization.
+  value: containers
+- name: KIBANA_BINARY
+  value: kibana-6.2.4.tar.gz
+  description: The kibana install
+- name: ELASTICSEARCH_URL
+  value: https://elasticsearch-api-elasticsearch.192.168.42.226.nip.io
+  description: The elasticsearch url to pull data from
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+    labels:
+    name: kibana
+  spec: {}
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: kibana
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: kibana:latest
+    resources: {}
+    source:
+      contextDir: ${REPO_CONTEXTDIR}
+      git:
+        ref: ${REPO_REF}
+        uri: ${REPO_URL}
+      type: Git
+    strategy:
+      dockerStrategy:
+        env:
+          - name: KIBANA_BINARY
+            value: ${KIBANA_BINARY}
+      type: Docker
+    triggers:
+    - type: ConfigChange
+- kind: PersistentVolumeClaim
+  apiVersion: v1
+  metadata:
+    name: kibana-data
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: ${STORAGE_SIZE}
+- kind: Route
+  apiVersion: v1
+  metadata:
+    labels:
+      route: kibana
+    name: kibana
+    creationTimestamp:
+  spec:
+    port:
+      targetPort: api-http
+    to:
+      kind: Service
+      name: kibana
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: Redirect
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      metrics: kibana
+    name: kibana
+  spec:
+    ports:
+    - name: api-http
+      port: 5601
+      protocol: TCP
+      targetPort: 5601
+    selector:
+      metrics: kibana
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      metrics: kibana
+    name: kibana
+  spec:
+    strategy:
+        type: Recreate
+    triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - kibana
+        from:
+          kind: ImageStreamTag
+          name: kibana:latest
+          namespace: continuous-infra
+          lastTriggeredImage: ''
+    - type: ConfigChange
+    replicas: 1
+    selector:
+      metrics: kibana
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          metrics: kibana
+      spec:
+        containers:
+        - env:
+          - name: SERVER_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: ELASTICSEARCH_URL
+            value: ${ELASTICSEARCH_URL}
+          image: kibana:stable
+          imagePullPolicy: Always
+          name: kibana
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ping
+              port: 8086
+              scheme: HTTP
+            initialDelaySeconds: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ping
+              port: 8086
+              scheme: HTTP
+            initialDelaySeconds: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          ports:
+          - containerPort: 8086
+            protocol: TCP
+          - containerPort: 8087
+            protocol: UDP
+          - containerPort: 8083
+            protocol: TCP
+          volumeMounts:
+          - mountPath: /var/lib/kibana
+            name: kibana-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        volumes:
+        - name: kibana-data
+          persistentVolumeClaim:
+            claimName: kibana-data
+  status: {}
+labels:
+  template: kibana

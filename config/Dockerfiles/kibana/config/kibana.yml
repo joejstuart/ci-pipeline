@@ -1,0 +1,6 @@
+---
+# Default Kibana configuration from kibana-docker.
+
+server.name: ${SERVER_NAME}
+server.host: "0"
+elasticsearch.url: ${ELASTICSEARCH_URL}
