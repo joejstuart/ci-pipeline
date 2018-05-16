@@ -23,9 +23,6 @@ COPY bin/kibana-docker /usr/local/bin/
 # Add a self-signed SSL certificate for use in examples.
 COPY ssl/kibana.example.org.* /usr/share/kibana/config/
 
-# Add elasticsearch.pem
-COPY ssl/elasticsearch.pem /usr/share/kibana/config/
-
 # Provide a non-root user to run the process.
 RUN groupadd --gid 1000 kibana && \
     useradd --uid 1000 --gid 1000 \
