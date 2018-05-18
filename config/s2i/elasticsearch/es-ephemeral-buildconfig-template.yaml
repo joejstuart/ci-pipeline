@@ -109,6 +109,16 @@ objects:
     tls:
       termination: edge
       insecureEdgeTerminationPolicy: Redirect
+- kind: PersistentVolumeClaim
+  apiVersion: v1
+  metadata:
+    name: elasticsearch-data
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 10Gi
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
@@ -131,7 +141,7 @@ objects:
           namespace: continuous-infra
           lastTriggeredImage: ''
     - type: ConfigChange
-    replicas: 3
+    replicas: 1
     selector:
       component: elasticsearch
     template:
@@ -187,6 +197,13 @@ objects:
             - name: transport
               containerPort: 9300
               protocol: TCP
+          volumeMounts:
+          - mountPath: /usr/share/elasticsearch/data
+            name: elasticsearch-data
+        volumes:
+        - name:
+          persistentVolumeClaim:
+            claimName: elasticsearch-data
         securityContext:
           privileged: false
         restartPolicy: Always
