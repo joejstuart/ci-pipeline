@@ -7,7 +7,6 @@ node:
   name: ${NODE_NAME}
   ingest: ${NODE_INGEST}
   max_local_storage_nodes: 1
-  local: ${NODE_LOCAL}
 
 network.host: ${NETWORK_HOST}
 
