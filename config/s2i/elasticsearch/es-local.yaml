@@ -1,0 +1,155 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: elasticsearch
+  annotations:
+    openshift.io/display-name: elasticsearch
+    description: |-
+              contra elasticsearch template
+    iconClass: icon-jenkins
+    tags: instant-app,elasticsearch
+    template.openshift.io/long-description: Elasticsearch container
+    template.openshift.io/provider-display-name: Red Hat, Inc.
+    template.openshift.io/documentation-url: https://docs.openshift.org/latest
+    template.openshift.io/support-url: https://access.redhat.com
+parameters:
+- name: STORAGE_SIZE
+  value: 10Gi
+  description: The size of the persistent storage for Elasticsearch
+- name: REPO_URL
+  value: https://github.com/joejstuart/ci-pipeline.git
+  description: The dockerfile repo url
+- name: REPO_CONTEXTDIR
+  description: The sub-directory inside the repository.
+  value: config/Dockerfiles/es-local
+- name: REPO_REF
+  description: The git ref or tag to use for customization.
+  value: esPersistent
+- name: ELASTICSEARCH_VERSION
+  value: 6.2.4
+  description: The es version
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+    labels:
+      component: es-local
+    name: es-local
+  spec: {}
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: es-local
+    labels: 
+      component: es-local
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: es-local:latest
+    resources: {}
+    source:
+      contextDir: ${REPO_CONTEXTDIR}
+      git:
+        ref: ${REPO_REF}
+        uri: ${REPO_URL}
+      type: Git
+    strategy:
+      dockerStrategy:
+        env:
+          - name: ELASTICSEARCH_VERSION
+            value: ${ELASTICSEARCH_VERSION}
+      type: Docker
+    triggers:
+    - type: ConfigChange
+- kind: PersistentVolumeClaim
+  apiVersion: v1
+  metadata:
+    name: es-local-data
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: ${STORAGE_SIZE}
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      component: es-local
+    name: es-local
+  spec:
+    strategy:
+        type: Recreate
+    triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - es-local
+        from:
+          kind: ImageStreamTag
+          name: es-local:latest
+          namespace: es-local
+          lastTriggeredImage: ''
+    - type: ConfigChange
+    replicas: 1
+    selector:
+      component: es-local
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          component: es-local
+      spec:
+        containers:
+        - env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: ELASTICSEARCH_VERSION
+            value: ${ELASTICSEARCH_VERSION}
+          - name: CLUSTER_NAME
+            value: "elasticsearch"
+          - name: NUMBER_OF_MASTERS
+            value: "2" 
+          - name: NODE_MASTER
+            value: "true"
+          - name: NODE_DATA
+            value: "true"
+          - name: HTTP_ENABLE
+            value: "true"
+          - name: ES_JAVA_OPTS
+            value: "-Xms1024m -Xmx1024m"
+          - name: DISCOVERY_SERVICE
+            value: "elasticsearch-discovery"
+          - name: NETWORK_HOST
+            value: "_site_"
+          - name: NODE_INGEST
+            value: "true"
+          - name: HTTP_CORS_ENABLE
+            value: "true"
+          - name: HTTP_CORS_ALLOW_ORIGIN
+            value: "*"
+          - name: MIN_MASTERS
+            value: "1"
+          image: es-local:latest
+          imagePullPolicy: Always
+          name: es-local
+          volumeMounts:
+          - mountPath: /usr/share/elasticsearch/data
+            name: es-local-data
+        volumes:
+        - name: es-local-data
+          persistentVolumeClaim:
+            claimName: es-local-data
+        securityContext:
+          privileged: false
+        restartPolicy: Always
+  status: {}
+labels:
+  template: es-local
