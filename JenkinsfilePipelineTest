@@ -14,8 +14,6 @@ def podName = 'fedora-cloud-' + executionID + '-allpkgs'
 
 containers = ['rpmbuild': ['tag': 'latest']]
 
-podTemplate (
-    'containers': containers,
-    'podName': podName
-    ),
-    {}
+podTemplate('containers': containers, 'podName': podName), {
+    echo "stuff"
+}
