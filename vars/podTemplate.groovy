@@ -1,4 +1,4 @@
-def call(parameters = [:]) {
+def call(parameters = [:], Closure body) {
 
     def containers = parameters.get("containers")
     def openshift_namespace = parameters.get('openshift_namespace', 'continuous-infra')
@@ -33,5 +33,8 @@ def call(parameters = [:]) {
             idleMinutes: 0,
             namespace: openshift_namespace,
             containers: containerTemplates,
-            volumes: [emptyDirVolume(memory: false, mountPath: '/sys/class/net')])
+            volumes: [emptyDirVolume(memory: false, mountPath: '/sys/class/net')]
+    ) {
+        body()
+    }
 }
