@@ -17,7 +17,7 @@ def call(parameters = [:]) {
             workingDir: '/workDir')
 
     containers.each { containerName, containerProps ->
-        def tag = containerProps['tag'] ?: 'stable'
+        def tag = parameters.get('tag', 'stable')
         imageUrl = docker_repo_url + '/' + openshift_namespace + '/' + containerName + tag
         containerTemplates << containerTemplate(name: containerName,
                 image: imageUrl,
