@@ -3,6 +3,7 @@ def call(parameters = [:]) {
     def containers = parameters.get("containers")
     def openshift_namespace = parameters.get('openshift_namespace', 'continuous-infra')
     def docker_repo_url = parameters.get('docker_repo_url', '172.30.254.79:5000')
+    def podName = parameters.get('podName', "generic-${UUID.randomUUID().toString()}")
     def openshift_service_account = parameters.get("openshift_service_account", 'jenkins')
 
     def containerTemplates = []

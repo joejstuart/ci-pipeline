@@ -7,8 +7,15 @@ libraries.each { name, repo ->
 
 }
 
+def executionID = UUID.randomUUID().toString()
+
+// Pod name to use
+def podName = 'fedora-cloud-' + executionID + '-allpkgs'
+
 containers = ['rpmbuild': ['tag': 'latest']]
 
 podTemplate(
-    parameters: containers
+    parameters: ['containers': containers,
+                 'podName': podName
+                ]
 )
