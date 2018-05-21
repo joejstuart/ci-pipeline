@@ -35,6 +35,8 @@ def call(parameters = [:], Closure body) {
             containers: containerTemplates,
             volumes: [emptyDirVolume(memory: false, mountPath: '/sys/class/net')]
     ) {
-        body()
+        node(podName) {
+            body()
+        }
     }
 }
