@@ -8,8 +8,7 @@ run_as_other_user_if_needed() {
     if [[ "$(id -u)" == "0" ]]; then
         # If running as root, drop to specified UID and run command
         echo "running with chroot"
-        #exec chroot --userspec=1000 / "${@}"
-        exec chroot --userspec=${RUN_AS_USER} / "${@}"
+        exec chroot --userspec=1000 / "${@}"
     else
         # Either we are running in Openshift with random uid and are a member of the root group
         # or with a custom --user
