@@ -32,7 +32,7 @@ class pipelineJobTrigger {
                stringParam('DOCKER_REPO_URL', '172.30.254.79:5000', 'Docker repo url for Openshift instance')
                stringParam('OPENSHIFT_NAMESPACE', 'continuous-infra', 'Project namespace for Openshift operations')
                stringParam('OPENSHIFT_SERVICE_ACCOUNT', 'jenkins', 'Service Account for Openshift operations')
-               stringParam('CI_MESSAGE', CANNED_CI_MESSAGE, 'CI_MESSAGE')
+               stringParam('CI_MESSAGE', '{}', 'CI_MESSAGE')
            }
            definition {
                cpsScm {
