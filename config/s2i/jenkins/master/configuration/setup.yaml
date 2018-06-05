@@ -1,13 +1,6 @@
 ---
 seed_jobdsl: |
   job("seed") {
-      properties {
-          authorizeProjectProperty {
-              strategy {
-                  triggeringUsersAuthorizationStrategy()
-              }
-          }
-      }
       scm {
           git(
           'https://github.com/joejstuart/ci-pipeline.git',
