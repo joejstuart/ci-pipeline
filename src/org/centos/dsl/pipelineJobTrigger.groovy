@@ -53,16 +53,4 @@ class pipelineJobTrigger {
 
     }
 
-/*
-    properties(
-            [
-                    buildDiscarder(logRotator(artifactDaysToKeepStr: '30', artifactNumToKeepStr: '100', daysToKeepStr: '90', numToKeepStr: '100')),
-                    [$class: 'JobPropertyImpl', throttle: [count: 150, durationName: 'hour', userBoost: false]],
-                    parameters(
-                            [
-                            ]
-                    ),
-            ]
-    )
-*/
 }
