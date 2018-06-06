@@ -7,12 +7,14 @@ class pipelineJobTrigger {
     def name
     def gitUrl
     def gitBranch
+    def script
 
-    pipelineJobTrigger(instance, name, gitUrl, gitBranch) {
+    pipelineJobTrigger(instance, name, gitUrl, gitBranch, script) {
         this.instance = instance
         this.name = name
         this.gitUrl = gitUrl
         this.gitBranch = gitBranch
+        this.script = script
     }
 
     def create() {
@@ -45,6 +47,7 @@ class pipelineJobTrigger {
                        }
 
                    }
+                   scriptPath(script)
                }
            }
        }
